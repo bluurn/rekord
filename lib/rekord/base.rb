@@ -1,6 +1,10 @@
 class Rekord::Base
-  def initialize(**args, &block)
-    send(:'props=', args, &block)
+  def initialize(**args)
+    if block_given?
+      yield self
+    else
+      send(:'props=', args)
+    end
   end
 
   def props
@@ -9,13 +13,9 @@ class Rekord::Base
     end
   end
 
-  def props=(**new_props, &block)
-    if block_given?
-      block.call(self)
-    else
-      new_props.each do |variable, value|
-        send("#{variable}=".to_sym, value)
-      end
+  def props=(**new_props)
+    new_props.each do |variable, value|
+      send("#{variable}=".to_sym, value)
     end
   end
 
