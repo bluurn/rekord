@@ -1,19 +1,14 @@
 require "rekord/prop_methods"
 require "rekord/repo"
-require "rekord/storage"
+require "rekord/persistent_storage"
+require "rekord/config"
 
 class Rekord::Base
   include Rekord::PropMethods
   include Rekord::RepoMethods
+  include Rekord::Config
 
-
-  class << self
-    def config
-      @config ||= Struct.new(:storage).new
-    end
-
-    def configure
-      yield config if block_given?
-    end
+  configure do |c|
+    c.storage = Rekord::PersistentStorage.new
   end
 end

@@ -40,7 +40,7 @@ class FakeStorage < Rekord::AbstractStorage
     new_record
   end
 
-  private
+  protected
 
   def data_from(table)
     @@CACHE[table] || []
