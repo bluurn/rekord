@@ -1,5 +1,6 @@
 require "rekord/version"
+require "rekord/base"
 
 module Rekord
-  # Your code goes here...
+  NotFound = Class.new(Exception)
 end
