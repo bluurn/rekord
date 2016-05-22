@@ -45,6 +45,15 @@ module Rekord
       base.extend ClassMethods
     end
 
+    def save
+      self.props = if persisted? then
+                     self.class.repo.update(self.class, self, new_props)
+                   else
+                     self.class.repo.create(self.class, self.props)
+                   end
+    end
+
+
     def update(new_props)
       self.props = self.class.repo.update(self.class, self, new_props)
       self
@@ -108,6 +117,10 @@ module Rekord
 
       def all
         repo.all(self)
+      end
+
+      def count
+        all.count
       end
     end
   end

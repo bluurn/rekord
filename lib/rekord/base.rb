@@ -9,6 +9,6 @@ class Rekord::Base
   include Rekord::Config
 
   configure do |c|
-    c.storage = Rekord::PersistentStorage.new
+    c.storage = Rekord::PersistentStorage.new path: "rekords.pstore"
   end
 end

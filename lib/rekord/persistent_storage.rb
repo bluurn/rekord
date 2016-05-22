@@ -46,6 +46,8 @@ module Rekord
       record
     end
 
+    protected
+
     def commit!
       @adapter.transaction do
         @cache.dup.each do |data_root_name, value|
@@ -54,14 +56,13 @@ module Rekord
       end
     end
 
-    protected
 
     def get_new_key_val(table)
       @cache["#{table}_key"] ||= data_from(table).count + 1
     end
 
     def data_from(table)
-      @cache[table] || []
+      @cache[table] ||= []
     end
 
     def load_data!

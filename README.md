@@ -1,8 +1,7 @@
 # Rekord
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rekord`. To experiment with that code, run `bin/console` for an interactive prompt.
+Active::Record's ugly brother, who was locked in the basement... until now! This gem is a dead simple implementation of AR with file persistent storage.
 
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
@@ -22,20 +21,45 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+  # Configuration:
 
-## Development
+  Rekord::Base.configure do |c|
+    c.storage = Rekord::PersistentStorage.new(path: 'your.db')
+  end
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+  # Model definition:
+  class Book < Rekord::Base
+    prop :id
+    prop :title
+    prop :author
+  end
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+  # Create:
+  book = Book.create(title: "A Sound of Thunder", author: "Ray Bradburry")
 
-## Contributing
+  # Init:
+  book = Book.new(title: "A Sound of Thunder", author: "Ray Bradburry")
+  book.new_record?
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rekord.
+  # Props
+  book.props = { author: "me" }
+  book.props # { title: "A Sound of Thunder", author: "me" }
+  book.save
 
+  # Read:
+
+  Book.find(1)
+  Book.where author: 'me'
+
+  # Update:
+  book.update author: 'me'
+
+  # Delete:
+  book.destroy
+
+```
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
