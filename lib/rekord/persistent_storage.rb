@@ -4,9 +4,10 @@ require 'pstore'
 module Rekord
   class PersistentStorage < AbstractStorage
 
-    def initialize(adapter = PStore, path:)
+    def initialize(storage = PStore, path:)
       @cache = {}
-      @adapter = adapter.new(path)
+      @storage = storage.new(path)
+      load_data!
     end
 
     def get_by_key(table, key, key_val)
@@ -49,9 +50,9 @@ module Rekord
     protected
 
     def commit!
-      @adapter.transaction do
+      @storage.transaction do
         @cache.dup.each do |data_root_name, value|
-          @adapter[data_root_name] = value
+          @storage[data_root_name] = value
         end
       end
     end
@@ -67,9 +68,9 @@ module Rekord
 
     def load_data!
       readonly = true
-      @adapter.transaction(readonly) do
-        @adapter.roots.each do |data_root_name|
-          @cache[data_root_name] = @adapter[data_root_name]
+      @storage.transaction(readonly) do
+        @storage.roots.each do |data_root_name|
+          @cache[data_root_name] = @storage[data_root_name]
         end
       end
     end

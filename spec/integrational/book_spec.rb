@@ -2,23 +2,7 @@ require 'spec_helper'
 require 'fixtures/book'
 require 'fileutils'
 
-def setup_test!
-  fixtures_file_path = File.join(File.dirname(__FILE__), '..', 'fixtures', 'storage.pstore')
-  clean_storage!
-  Rekord::Base.configure do |c|
-    c.storage = Rekord::PersistentStorage.new(path: fixtures_file_path)
-  end
-end
-
-def clean_storage!
-  fixtures_file_path = File.join(File.dirname(__FILE__), '..', 'fixtures', 'storage.pstore')
-  File.write(fixtures_file_path, '')
-end
-
 describe Book do
-  before(:all) { setup_test! }
-  after(:all) { clean_storage! }
-
   describe "#create" do
     it "should create new record" do
       old_cnt = described_class.count
@@ -51,7 +35,7 @@ describe Book do
 
   describe "#where" do
     before do
-      1.upto(10).each { |x| described_class.create author: "Bot", title: "Book#{x}" }
+      10.times { |x| described_class.create author: "Bot", title: "Book#{x+1}" }
     end
     it "should retreive a collection by condition" do
       collection = described_class.where author: "Bot"

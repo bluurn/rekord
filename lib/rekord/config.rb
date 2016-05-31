@@ -1,7 +1,7 @@
 module Rekord
   module Config
     def self.included(base)
-      base.extend ClassMethods
+      base.extend(ClassMethods)
     end
 
     module ClassMethods

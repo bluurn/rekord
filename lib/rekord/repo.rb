@@ -42,15 +42,15 @@ module Rekord
 
   module RepoMethods
     def self.included(base)
-      base.extend ClassMethods
+      base.extend(ClassMethods)
     end
 
     def save
-      self.props = if persisted? then
-                     self.class.repo.update(self.class, self, new_props)
-                   else
-                     self.class.repo.create(self.class, self.props)
-                   end
+      if persisted? then
+        self.update(props)
+      else
+        self.class.create(props)
+      end
     end
 
 
@@ -94,12 +94,8 @@ module Rekord
         @table_name = new_table_name.to_sym
       end
 
-      def key=(new_key)
-        @key = new_key
-      end
-
-      def key
-        @key ||= :id
+      def key(new_key = :id)
+        @key ||= new_key
       end
 
       def find(id)
